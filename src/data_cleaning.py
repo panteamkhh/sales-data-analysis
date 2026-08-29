@@ -23,5 +23,15 @@ def clean_fact(fact: pd.DataFrame) -> pd.DataFrame:
     """
     fact = fact.copy()
     fact["PromotionID"] = fact["PromotionID"].replace(0, np.nan)
-    fact["Date"] = pd.to_datetime(fact["Date"])
+    # Keep PromotionID as a generic object dtype (not float64) so it can
+    # always be merged against Dim Promotion's string IDs ("PR001", ...)
+    # later on, even in edge-case slices where every row happens to have
+    # the same value (which would otherwise let pandas infer a pure
+    # numeric dtype).
+    fact["PromotionID"] = fact["PromotionID"].astype(object)
+    # dayfirst=True matches the source header ("Date (dd/mm/yyyy)"); it's a
+    # no-op when Excel already hands back native datetime values, but
+    # protects against ambiguous day/month parsing if the column is ever
+    # exported as plain text (e.g. after a CSV round-trip).
+    fact["Date"] = pd.to_datetime(fact["Date"], dayfirst=True)
     return fact
