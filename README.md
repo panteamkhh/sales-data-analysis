@@ -42,12 +42,6 @@ sales-data-analysis/
         └── ...
 ```
 
-> Put your `.pbix` file and its exported visuals under `powerbi/` exactly as
-> above — that's the one folder a visitor needs to check to see the Power BI
-> side of the project. `powerbi/screenshots/` mirrors the numbering used in
-> `screenshots/` (`01_...`, `02_...`) so the two implementations are easy to
-> compare question-by-question in the **Results** section below.
-
 ## Dataset
 
 `data/store_data.xlsx` is a star schema with one fact table and three
@@ -152,10 +146,6 @@ compared directly.
 |---|---|
 | ![Sales by city](screenshots/08_sales_by_city.png) | ![Sales by city](powerbi/screenshots/08_sales_by_city.png) |
 
-> Q6 (total order count) and Q7 (filterable order-level table) are
-> computational outputs / interactive tables rather than static charts — see
-> the notebook for the Python side and the report's table visual + slicers
-> for the Power BI side.
 
 ## Tech Stack
 
