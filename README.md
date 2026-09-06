@@ -11,24 +11,24 @@ The analysis started with one question and let each answer point to the next.
 **Which products actually drive the business?**
 Grouping every order by product and ranking on sales revealed a steep drop-off — a handful of electronics carry most of the revenue, while the bottom performers barely register.
 
-<p align="center"><img src="screenshots/preview/top_bottom_sales.jpg" width="640"/></p>
+<p align="center"><img src="screenshots/01_top_bottom_sales.png" width="640"/></p>
 
 **Is revenue steady, or seasonal?**
 Rolling the same sales figures up by day, month, quarter, and year showed a clear pattern: a mid-year dip and a strong Q4 close, repeating across years.
 
-<p align="center"><img src="screenshots/preview/sales_trends.jpg" width="640"/></p>
+<p align="center"><img src="screenshots/02_sales_trends.png" width="640"/></p>
 
 **Can the profit numbers be trusted?**
 Since the raw data has no cost column, profit had to be estimated. Plotting profit against sales before locking in that assumption showed an almost perfectly straight line (r ≈ 0.99) — confirmation that a flat margin on net sales is a safe, consistent estimate rather than a rough guess.
 
-<p align="center"><img src="screenshots/preview/sales_vs_profit.jpg" width="640"/></p>
+<p align="center"><img src="screenshots/03_sales_profit_relationship.png" width="640"/></p>
 
 **Where is this revenue coming from?**
 Aggregating sales by customer city surfaced a small cluster of metro cities generating a disproportionate share of revenue — useful for targeting future promotions.
 
-<p align="center"><img src="screenshots/preview/sales_by_city.jpg" width="640"/></p>
+<p align="center"><img src="screenshots/08_sales_by_city.png" width="640"/></p>
 
-Every step above is a function in [`src/`](src) — `analysis.py` returns the numbers, `visualization.py` renders the chart — so the whole notebook re-runs end-to-end on fresh data with no manual steps.
+Every step above is a function in [`src/`](src) — `analysis.py` returns the numbers, `visualization.py` renders the chart — so the whole notebook re-runs end-to-end on fresh data with no manual steps. The remaining questions (average discount by promotion, period-over-period comparison) are covered the same way — see [`screenshots/`](screenshots) and the notebook for the full set.
 
 ---
 
@@ -38,17 +38,17 @@ The Python notebook answers each question once. The dashboard makes those same q
 
 **A single-page control tower.** Total orders, net sales vs. profit, average discount by promotion, and a live map of sales by city, all filterable at once.
 
-<p align="center"><img src="powerbi/screenshots/overview.jpg" width="640"/></p>
+<p align="center"><img src="powerbi/Overview.PNG" width="640"/></p>
 
 **Compare any two periods side by side** — sales, profit, and quantity sold, each with its own independent date range slicer.
 
-<p align="center"><img src="powerbi/screenshots/period_comparison.jpg" width="640"/></p>
+<p align="center"><img src="powerbi/Comparison%20Sales-Profit-Quantity.PNG" width="640"/></p>
 
 **Drill into every single order** — filterable by product, customer, date, or promotion, down to the transaction level.
 
-<p align="center"><img src="powerbi/screenshots/order_level_table.jpg" width="640"/></p>
+<p align="center"><img src="powerbi/Table%20Visual.PNG" width="640"/></p>
 
-Open `powerbi/sales-data-analysis.pbix` in Power BI Desktop for the full interactive report.
+Open `powerbi/sales-data-analysis.pbix` in Power BI Desktop for the full interactive report, including the top/bottom product breakdowns and cross-visual filtering.
 
 ---
 
@@ -64,7 +64,7 @@ sales-data-analysis/
 ├── data/store_data.xlsx          # source workbook (fact + 3 dimension tables)
 ├── powerbi/
 │   ├── sales-data-analysis.pbix  # interactive dashboard
-│   └── screenshots/              # dashboard preview images
+│   └── *.PNG                     # dashboard screenshots
 ├── src/                          # analysis package
 │   ├── data_loader.py            # reads the raw Excel sheets
 │   ├── data_cleaning.py          # whitespace / dtype cleanup
