@@ -1,9 +1,3 @@
-"""
-data_cleaning.py
-----------------
-Basic cleaning routines applied to the raw tables before analysis.
-"""
-
 import numpy as np
 import pandas as pd
 
