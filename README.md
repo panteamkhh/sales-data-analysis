@@ -48,6 +48,10 @@ The Python notebook answers each question once. The dashboard makes those same q
 
 <p align="center"><img src="powerbi/screenshots/Table%20Visual.PNG" width="640"/></p>
 
+**Do the top sellers also make the most money?** Ranking products by both sales and profit side by side confirms it — the same five products lead on both metrics, since profit is a fixed margin of sales. The bottom performers tell a different story: mostly low-ticket household items where even strong unit sales barely move the needle on revenue.
+
+<p align="center"><img src="powerbi/screenshots/Top-buttom%20by%20sales%20%26%20profit.PNG" width="640"/></p>
+
 Open `powerbi/sales-data-analysis.pbix` in Power BI Desktop for the full interactive report, including the top/bottom product breakdowns and cross-visual filtering.
 
 ---
