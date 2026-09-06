@@ -60,8 +60,4 @@ pip install -r requirements.txt
 jupyter notebook notebooks/Sales_Data_Analysis.ipynb
 ```
 
-## Key assumptions
 
-- Discount rate is parsed from each promotion's terms (e.g. "20% off" → 20%); "Buy 1 Get 1 Free" is modeled as an effective 50% discount.
-- Profit is calculated as a flat 10% margin on net sales, matching the measure used in the Power BI model (the source data has no cost column).
-- Orders with no promotion applied are labeled "No Promotion."
