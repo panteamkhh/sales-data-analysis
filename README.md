@@ -1,36 +1,61 @@
 # 📊 Sales Data Analysis
 
-An end-to-end retail sales analysis, built twice — once as an interactive **Power BI dashboard** and once as a clean, modular **Python** pipeline (pandas + matplotlib, notebook-driven). Same data, same business logic, two ways of delivering it.
+A retail sales dataset, analyzed twice: first exploratively in **Python**, question by question, then packaged into an interactive **Power BI** dashboard so anyone on the business side can explore it without touching code.
 
-## What this project answers
+---
 
-- Which products are the strongest and weakest performers — by sales, profit, and units sold
-- How sales move over time — daily, monthly, quarterly, and year over year
-- How closely profit tracks sales, and where that relationship breaks down
-- How any two time periods compare on sales, profit, and quantity sold
-- Which promotions carry the deepest average discounts
-- Where revenue is concentrated geographically, by city
-- A fully filterable order-level view — by product, date, customer, or promotion
+## Part 1 — Exploring the data in Python
 
-## Dashboard preview
+The analysis started with one question and let each answer point to the next.
 
-<p align="center">
-  <img src="powerbi/screenshots/overview.jpg" width="420"/>
-  <img src="powerbi/screenshots/top_bottom_products.jpg" width="420"/>
-  <br/>
-  <img src="powerbi/screenshots/sales_trends.jpg" width="420"/>
-  <img src="powerbi/screenshots/period_comparison.jpg" width="420"/>
-  <br/>
-  <img src="powerbi/screenshots/top_bottom_sales_vs_profit.jpg" width="420"/>
-  <img src="powerbi/screenshots/order_level_table.jpg" width="420"/>
-</p>
+**Which products actually drive the business?**
+Grouping every order by product and ranking on sales revealed a steep drop-off — a handful of electronics carry most of the revenue, while the bottom performers barely register.
 
-The full interactive report — with slicers, drill-through, and tooltips — is in `powerbi/sales-data-analysis.pbix`.
+<p align="center"><img src="screenshots/preview/top_bottom_sales.jpg" width="640"/></p>
+
+**Is revenue steady, or seasonal?**
+Rolling the same sales figures up by day, month, quarter, and year showed a clear pattern: a mid-year dip and a strong Q4 close, repeating across years.
+
+<p align="center"><img src="screenshots/preview/sales_trends.jpg" width="640"/></p>
+
+**Can the profit numbers be trusted?**
+Since the raw data has no cost column, profit had to be estimated. Plotting profit against sales before locking in that assumption showed an almost perfectly straight line (r ≈ 0.99) — confirmation that a flat margin on net sales is a safe, consistent estimate rather than a rough guess.
+
+<p align="center"><img src="screenshots/preview/sales_vs_profit.jpg" width="640"/></p>
+
+**Where is this revenue coming from?**
+Aggregating sales by customer city surfaced a small cluster of metro cities generating a disproportionate share of revenue — useful for targeting future promotions.
+
+<p align="center"><img src="screenshots/preview/sales_by_city.jpg" width="640"/></p>
+
+Every step above is a function in [`src/`](src) — `analysis.py` returns the numbers, `visualization.py` renders the chart — so the whole notebook re-runs end-to-end on fresh data with no manual steps.
+
+---
+
+## Part 2 — Turning it into a Power BI dashboard
+
+The Python notebook answers each question once. The dashboard makes those same questions explorable — filter by date, product, customer, or promotion, and every visual updates together.
+
+**A single-page control tower.** Total orders, net sales vs. profit, average discount by promotion, and a live map of sales by city, all filterable at once.
+
+<p align="center"><img src="powerbi/screenshots/overview.jpg" width="640"/></p>
+
+**Compare any two periods side by side** — sales, profit, and quantity sold, each with its own independent date range slicer.
+
+<p align="center"><img src="powerbi/screenshots/period_comparison.jpg" width="640"/></p>
+
+**Drill into every single order** — filterable by product, customer, date, or promotion, down to the transaction level.
+
+<p align="center"><img src="powerbi/screenshots/order_level_table.jpg" width="640"/></p>
+
+Open `powerbi/sales-data-analysis.pbix` in Power BI Desktop for the full interactive report.
+
+---
 
 ## Tech stack
 
-**Power BI** · DAX measures, interactive slicers and filters
-**Python** · pandas, numpy, matplotlib, seaborn, Jupyter
+**Python** — pandas, numpy, matplotlib, seaborn, Jupyter
+**Power BI** — DAX measures, slicers, drill-through, interactive filtering
 
 ## Project structure
 
@@ -60,4 +85,8 @@ pip install -r requirements.txt
 jupyter notebook notebooks/Sales_Data_Analysis.ipynb
 ```
 
+## Key assumptions
 
+- Discount rate is parsed from each promotion's terms (e.g. "20% off" → 20%); "Buy 1 Get 1 Free" is modeled as an effective 50% discount.
+- Profit is calculated as a flat 10% margin on net sales, matching the measure used in the Power BI model (the source data has no cost column).
+- Orders with no promotion applied are labeled "No Promotion."
