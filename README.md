@@ -38,15 +38,15 @@ The Python notebook answers each question once. The dashboard makes those same q
 
 **A single-page control tower.** Total orders, net sales vs. profit, average discount by promotion, and a live map of sales by city, all filterable at once.
 
-<p align="center"><img src="powerbi/Overview.PNG" width="640"/></p>
+<p align="center"><img src="powerbi/screenshots/Overview.PNG" width="640"/></p>
 
 **Compare any two periods side by side** — sales, profit, and quantity sold, each with its own independent date range slicer.
 
-<p align="center"><img src="powerbi/Comparison%20Sales-Profit-Quantity.PNG" width="640"/></p>
+<p align="center"><img src="powerbi/screenshots/Comparison%20Sales-Profit-Quantity.PNG" width="640"/></p>
 
 **Drill into every single order** — filterable by product, customer, date, or promotion, down to the transaction level.
 
-<p align="center"><img src="powerbi/Table%20Visual.PNG" width="640"/></p>
+<p align="center"><img src="powerbi/screenshots/Table%20Visual.PNG" width="640"/></p>
 
 Open `powerbi/sales-data-analysis.pbix` in Power BI Desktop for the full interactive report, including the top/bottom product breakdowns and cross-visual filtering.
 
