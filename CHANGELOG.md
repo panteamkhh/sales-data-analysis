@@ -6,6 +6,18 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+### Added
+
+- `Pillow` runtime dependency used to pad every saved figure onto a fixed
+  white 1260x840 (3:2) canvas.
+
+### Changed
+
+- Restyled all charts to a shared spec: whitegrid theme, bold 13pt titles,
+  9x6 figures at 140 dpi, single accent `#2a6f97` / contrast `#c1121f`,
+  horizontal sorted bars with compact INR tick labels, cleaned time-axis
+  labels, and a log-log scatter for sales vs. profit.
+
 ## [1.0.0] - 2026-09-12
 
 ### Added
