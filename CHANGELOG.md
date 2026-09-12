@@ -17,6 +17,8 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
   9x6 figures at 140 dpi, single accent `#2a6f97` / contrast `#c1121f`,
   horizontal sorted bars with compact INR tick labels, cleaned time-axis
   labels, and a log-log scatter for sales vs. profit.
+- Top/Bottom product charts now use full-width stacked panels with value
+  labels and distinct accent/contrast colors for readability.
 
 ## [1.0.0] - 2026-09-12
 

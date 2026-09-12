@@ -71,32 +71,29 @@ def plot_top_bottom(top_n, bottom_n, metric_label: str, filename: str):
     is_money = metric_label in {"Sales", "Profit"}
     axis_label = f"{metric_label} (INR)" if is_money else metric_label
 
-    fig, axes = plt.subplots(1, 2, figsize=FIG_SIZE)
+    fig, axes = plt.subplots(2, 1, figsize=FIG_SIZE)
 
-    sns.barplot(
-        x=top_n.values, y=top_n.index, hue=top_n.index, legend=False, palette="crest", ax=axes[0]
+    panels = (
+        (axes[0], top_n, ACCENT, f"Top 5 Products by {metric_label}"),
+        (axes[1], bottom_n, CONTRAST, f"Bottom 5 Products by {metric_label}"),
     )
-    axes[0].set_title(f"Top 5 Products by {metric_label}")
-    axes[0].set_xlabel(axis_label)
-    axes[0].set_ylabel("")
-
-    sns.barplot(
-        x=bottom_n.values,
-        y=bottom_n.index,
-        hue=bottom_n.index,
-        legend=False,
-        palette="mako",
-        ax=axes[1],
-    )
-    axes[1].set_title(f"Bottom 5 Products by {metric_label}")
-    axes[1].set_xlabel(axis_label)
-    axes[1].set_ylabel("")
-
-    if is_money:
-        for ax in axes:
+    for ax, series, color, title in panels:
+        sns.barplot(x=series.values, y=series.index, color=color, ax=ax)
+        ax.set_title(title)
+        ax.set_xlabel(axis_label)
+        ax.set_ylabel("")
+        ax.bar_label(
+            ax.containers[0],
+            labels=[_compact_number(value) for value in series.values],
+            padding=3,
+            fontsize=9,
+            color="#333333",
+        )
+        ax.margins(x=0.14)
+        if is_money:
             _compact_axis(ax)
 
-    fig.tight_layout()
+    fig.tight_layout(h_pad=2.0)
     _save(fig, filename)
     return fig
 
