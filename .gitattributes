@@ -1,0 +1,15 @@
+# Normalize line endings; keep binaries untouched.
+* text=auto eol=lf
+
+*.ipynb text eol=lf
+*.png binary
+*.PNG binary
+*.xlsx binary
+*.pbix binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+
+# Keep diffs readable for generated files.
+data/*.xlsx -diff
+powerbi/*.pbix -diff
