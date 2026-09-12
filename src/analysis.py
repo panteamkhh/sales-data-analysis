@@ -11,10 +11,16 @@ import pandas as pd
 
 
 # Q1 -----------------------------------------------------------------
-def top_bottom_products(master: pd.DataFrame, metric: str, n: int = 5) -> tuple[pd.Series, pd.Series]:
-    """Return (top_n, bottom_n) product totals for a given metric column."""
+def top_bottom_products(
+    master: pd.DataFrame, metric: str, n: int = 5
+) -> tuple[pd.Series, pd.Series]:
+    """Return ``(top_n, bottom_n)`` product totals for a metric column.
+
+    ``top_n`` is sorted descending (largest first); ``bottom_n`` is sorted
+    ascending (smallest first) which reads naturally on a chart.
+    """
     grouped = master.groupby("Product Name")[metric].sum().sort_values(ascending=False)
-    return grouped.head(n), grouped.tail(n)
+    return grouped.head(n), grouped.tail(n).sort_values(ascending=True)
 
 
 # Q2 -----------------------------------------------------------------
@@ -40,7 +46,11 @@ def compare_periods(
     period2: tuple[str, str],
     labels: tuple[str, str] = ("Period 1", "Period 2"),
 ) -> pd.DataFrame:
-    """Compare Sales / Profit / Quantity / Orders between two date ranges."""
+    """Compare Sales / Profit / Quantity / Orders between two date ranges.
+
+    Percent change is left as ``NaN`` when the first period has no activity
+    instead of producing an infinite value.
+    """
 
     def summarize(period):
         start, end = pd.to_datetime(period[0]), pd.to_datetime(period[1])
@@ -55,19 +65,15 @@ def compare_periods(
         )
 
     result = pd.DataFrame({labels[0]: summarize(period1), labels[1]: summarize(period2)})
-    result["Change %"] = ((result[labels[1]] - result[labels[0]]) / result[labels[0]] * 100).round(1)
+    base = result[labels[0]].astype(float).replace(0.0, float("nan"))
+    result["Change %"] = ((result[labels[1]] - result[labels[0]]) / base * 100).round(1)
     return result
 
 
 # Q5 -----------------------------------------------------------------
 def avg_discount_by_promotion(master: pd.DataFrame) -> pd.Series:
     """Average discount percentage per promotion category, sorted descending."""
-    return (
-        master.groupby("Promotion Name")["DiscountPct"]
-        .mean()
-        .sort_values(ascending=False)
-        * 100
-    )
+    return master.groupby("Promotion Name")["DiscountPct"].mean().sort_values(ascending=False) * 100
 
 
 # Q6 -----------------------------------------------------------------
@@ -79,10 +85,10 @@ def total_orders(master: pd.DataFrame) -> int:
 # Q7 -----------------------------------------------------------------
 def filter_orders(
     master: pd.DataFrame,
-    product_name: str = None,
-    date_range: tuple[str, str] = None,
-    customer_id: int = None,
-    promotion: str = None,
+    product_name: str | None = None,
+    date_range: tuple[str, str] | None = None,
+    customer_id: int | None = None,
+    promotion: str | None = None,
 ) -> pd.DataFrame:
     """
     Return Sales / Profit / Discount / Net Sales and all remaining fields
@@ -90,19 +96,28 @@ def filter_orders(
     Promotion category (mirrors the Power BI visual-filter requirement).
     """
     df = master.copy()
-    if product_name:
+    if product_name is not None:
         df = df[df["Product Name"] == product_name]
-    if date_range:
+    if date_range is not None:
         start, end = pd.to_datetime(date_range[0]), pd.to_datetime(date_range[1])
         df = df[(df["Date"] >= start) & (df["Date"] <= end)]
-    if customer_id:
+    if customer_id is not None:
         df = df[df["CustomerID"] == customer_id]
-    if promotion:
+    if promotion is not None:
         df = df[df["Promotion Name"] == promotion]
 
     cols = [
-        "Date", "Customer Name", "Product Name", "UnitsSold", "TotalSales",
-        "DiscountPct", "DiscountValue", "NetSales", "Profit", "Promotion Name", "City",
+        "Date",
+        "Customer Name",
+        "Product Name",
+        "UnitsSold",
+        "TotalSales",
+        "DiscountPct",
+        "DiscountValue",
+        "NetSales",
+        "Profit",
+        "Promotion Name",
+        "City",
     ]
     return df[cols].reset_index(drop=True)
 

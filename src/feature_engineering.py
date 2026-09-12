@@ -20,19 +20,41 @@ provide these values directly):
    it becomes available.
 """
 
+import re
+import warnings
+
 import pandas as pd
 
-PROFIT_MARGIN = 0.10  # flat profit margin on Net Sales (matches the Power BI model)
+from .config import PROFIT_MARGIN
+
+_PERCENT_RE = re.compile(r"(\d+(?:\.\d+)?)\s*%")
+_BOGO_RE = re.compile(r"buy\s*1\s*get\s*1", re.IGNORECASE)
 
 
 def _parse_discount(reduction_type) -> float:
+    """Convert a promotion's free-text terms into a fractional discount.
+
+    Unknown non-empty formats are treated as 0% but emit a warning so silent
+    data-entry mistakes do not go unnoticed.
+    """
     if pd.isna(reduction_type):
         return 0.0
-    reduction_type = str(reduction_type).strip()
-    if "Buy 1 Get 1" in reduction_type:
+
+    text = str(reduction_type).strip()
+    if not text:
+        return 0.0
+
+    if _BOGO_RE.search(text):
         return 0.50
-    if "%" in reduction_type:
-        return float(reduction_type.replace("% off", "").strip()) / 100
+
+    match = _PERCENT_RE.search(text)
+    if match:
+        return float(match.group(1)) / 100
+
+    warnings.warn(
+        f"Unrecognized promotion terms {reduction_type!r}; treating as 0% discount.",
+        stacklevel=2,
+    )
     return 0.0
 
 
@@ -76,7 +98,9 @@ def build_master_table(
         fact.merge(products, on="ProductID", how="left")
         .merge(customers, left_on="CustomerID", right_on="Customer ID", how="left")
         .merge(
-            promotions[["PromotionID", "Promotion Name", "Ad Type", "Coupon Code", "Price Reduction Type"]],
+            promotions[
+                ["PromotionID", "Promotion Name", "Ad Type", "Coupon Code", "Price Reduction Type"]
+            ],
             on="PromotionID",
             how="left",
         )
